@@ -50,13 +50,13 @@ END;
 $function$
 
 -- CREAR PROVEEDOR
-CREATE OR REPLACE FUNCTION public.func_proveedor_c(emp integer, cli character varying, ruc character varying, tlf character varying, direc character varying, email character varying)
+CREATE OR REPLACE FUNCTION public.func_proveedor_c(emp integer, prov character varying, ruc character varying, tlf character varying, direc character varying, email character varying)
     RETURNS void
     LANGUAGE plpgsql
 AS $function$
 BEGIN
 	INSERT INTO tm_proveedor(empresa,proveedor, ruc, telefono, direccion, correo, creacion, estado)
-	VALUES(emp,UPPER(cli),ruc,tlf,UPPER(direc),email,now(),TRUE );
+	VALUES(emp,UPPER(prov),ruc,tlf,UPPER(direc),email,now(),TRUE );
 END;
 $function$
 

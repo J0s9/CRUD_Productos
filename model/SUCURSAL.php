@@ -3,7 +3,7 @@
         // LISTAR SUCURSAL x EMPRESA
         public function get_sucursal_x_suc($emp){
             $conectar = parent::Conexion();
-            $sql   = "SELECT func_sucursal_sucursal(:emp)";
+            $sql   = "SELECT func_sucursal_empresa(:emp)";
             $query = $conectar->prepare($sql);
             $query->bindValue(':emp', $emp, PDO::PARAM_INT);
             $query->execute();

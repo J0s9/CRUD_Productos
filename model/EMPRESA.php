@@ -3,7 +3,7 @@
         // LISTAR EMPRESA x COMPANIA
         public function get_empresa_x_cmp($cmp){
             $conectar = parent::Conexion();
-            $sql   = "SELECT func_empresa_sucursal(:cmp)";
+            $sql   = "SELECT func_empresa_compania(:cmp)";
             $query = $conectar->prepare($sql);
             $query->bindValue(':cmp', $cmp, PDO::PARAM_INT);
             $query->execute();

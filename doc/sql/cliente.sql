@@ -1,24 +1,27 @@
 -- LISTAR CLIENTE POR ID
-CREATE OR REPLACE FUNCTION public.func_categoria_r(code integer)
-    RETURNS TABLE(result json)
-    LANGUAGE plpgsql
-AS $function$
+CREATE OR REPLACE FUNCTION func_cliente_r(code INTEGER)
+RETURNS TABLE (RESULT JSON)
+AS $$
 BEGIN
 	RETURN QUERY
 	SELECT ROW_TO_JSON(r)
-	FROM (
+	FROM(
 		SELECT
 		c."ID",
-		c.categoria
-		FROM tm_categoria c
-		INNER JOIN tm_sucursal s ON c.sucursal = s."ID"
+		c.cliente,
+		c.ruc,
+		c.telefono,
+		c.direccion,
+		c.correo
+		FROM tm_cliente c
+		INNER JOIN tm_empresa e ON c.empresa = e."ID"
 		WHERE
 		c."ID"   = code
 		AND
 		c.estado = TRUE
 	)r;
 END;
-$function$
+$$LANGUAGE PLPGSQL;
 
 -- LISTAR CLIENTE POR EMPRESA
 CREATE OR REPLACE FUNCTION public.func_cliente_empresa(emp integer)

@@ -1,27 +1,30 @@
--- LISTAR CLIENTE POR ID
-CREATE OR REPLACE FUNCTION public.func_categoria_r(code integer)
-    RETURNS TABLE(result json)
-    LANGUAGE plpgsql
+-- LISTAR PROVEEDOR POR ID
+CREATE OR REPLACE FUNCTION public.func_proveedor_r(code integer)
+	RETURNS TABLE(result json)
+	LANGUAGE plpgsql
 AS $function$
 BEGIN
 	RETURN QUERY
-	SELECT ROW_TO_JSON(r)
-	FROM (
+	SELECT ROW_TO_JSON (r)
+	FROM(
 		SELECT
-		c."ID",
-		c.categoria
-		FROM tm_categoria c
-		INNER JOIN tm_sucursal s ON c.sucursal = s."ID"
+		p."ID",
+		p.proveedor,
+		p.ruc,
+		p.telefono,
+		p.correro
+		FROM tm_proveedor p
+		INNER JOIN tm_empresa e ON p.empresa = e."ID"
 		WHERE
-		c."ID"   = code
+		p."ID"   = code
 		AND
-		c.estado = TRUE
+		p.estado = TRUE
 	)r;
 END;
 $function$
 
--- LISTAR CLIENTE POR EMPRESA
-CREATE OR REPLACE FUNCTION public.func_cliente_empresa(emp integer)
+-- LISTAR PROVEEDOR POR EMPRESA
+CREATE OR REPLACE FUNCTION public.func_proveedor_empresa(emp integer)
     RETURNS TABLE(result json)
     LANGUAGE plpgsql
 AS $function$
@@ -29,60 +32,60 @@ BEGIN
 	RETURN QUERY
 	SELECT ROW_TO_JSON(r)
 	FROM(
-	SELECT
-	c."ID",
-	c.cliente,
-	c.ruc,
-	c.telefono,
-	c.direccion,
-	c.correo
-	FROM tm_cliente c
-	INNER JOIN tm_empresa e ON c.empresa = e."ID"
-	WHERE
-	c.empresa = emp
-	AND
-	c.estado  = TRUE
+		SELECT
+		c."ID",
+		c.proveedor,
+		c.ruc,
+		c.telefono,
+		c.direccion,
+		c.correo
+		FROM tm_proveedor c
+		INNER JOIN tm_empresa e ON c.empresa = e."ID"
+		WHERE
+		c.empresa = emp
+		AND
+		c.estado  = TRUE
 	)r;
 END;
 $function$
 
--- CREAR CLIENTE
-CREATE OR REPLACE FUNCTION public.func_cliente_c(emp integer, cli character varying, ruc character varying, tlf character varying, direc character varying, email character varying)
+-- CREAR PROVEEDOR
+CREATE OR REPLACE FUNCTION public.func_proveedor_c(emp integer, cli character varying, ruc character varying, tlf character varying, direc character varying, email character varying)
     RETURNS void
     LANGUAGE plpgsql
 AS $function$
 BEGIN
-	INSERT INTO tm_cliente(empresa,cliente, ruc, telefono, direccion, correo, creacion, estado)
+	INSERT INTO tm_proveedor(empresa,proveedor, ruc, telefono, direccion, correo, creacion, estado)
 	VALUES(emp,UPPER(cli),ruc,tlf,UPPER(direc),email,now(),TRUE );
 END;
 $function$
 
 -- ACTUALIZAR SUCURSAL
-CREATE OR REPLACE FUNCTION public.func_cliente_u(id integer, emp integer, cli character varying, r character varying, tlf character varying, direc character varying, email character varying)
+CREATE OR REPLACE FUNCTION public.func_proveedor_u(id integer, emp integer, cli character varying, r character varying, tlf character varying, direc character varying, email character varying)
     RETURNS void
     LANGUAGE plpgsql
 AS $function$
 BEGIN
-	UPDATE tm_cliente
+	UPDATE tm_proveedor
 	SET
-	empresa   = emp,
-	cliente   = upper(cli),
-	ruc 	  = r,
-	telefono  = tlf,
-	direccion = upper(direc),
-	correo    = email
+	empresa     = emp,
+	proveedor   = upper(cli),
+	ruc 	    = r,
+	telefono    = tlf,
+	direccion   = upper(direc),
+	correo      = email
 	WHERE
 	"ID" = id;
 END;
 $function$
 
 -- ELIMINAR SUCURSAL
-CREATE OR REPLACE FUNCTION public.func_cliente_d(id integer)
+CREATE OR REPLACE FUNCTION public.func_proveedor_d(id integer)
     RETURNS void
     LANGUAGE plpgsql
 AS $function$
 BEGIN
-	UPDATE tm_cliente c
+	UPDATE tm_proveedor c
 	SET estado = FALSE
 	WHERE
 	c."ID"     = id;

@@ -1,3 +1,22 @@
+-- LISTAR COMPANIA
+CREATE OR REPLACE FUNCTION public.func_compania()
+	RETURNS TABLE(result json)
+	LANGUAGE plpgsql
+AS $function$
+BEGIN
+	RETURN QUERY
+	SELECT ROW_TO_JSON(r)
+	FROM(
+	SELECT
+	c."ID",
+	c.compania
+	FROM tm_compania c
+	WHERE
+	c.estado = TRUE
+	)r;
+END;
+$function$
+
 -- LISTAR COMPANIA POR ID
 CREATE OR REPLACE FUNCTION func_compania_r(code INTEGER)
 RETURNS TABLE (RESULT JSON)

@@ -8,6 +8,14 @@
             $query->bindValue(':cod', $compania, PDO::PARAM_STR);
             $query->execute();
         }
+        // LISTAR COMPANIA 
+        public function get_compania(){
+            $conectar = parent::Conexion();
+            $sql   = "SELECT func_compania()";
+            $query = $conectar->prepare($sql);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
         // LISTAR COMPANIA X ID
         public function get_compania_read($cod){
             $conectar = parent::Conexion();

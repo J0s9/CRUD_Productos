@@ -1,24 +1,24 @@
 <?php
 require_once("../config/conectar.php");
-require_once("../model/COMPANIA.php");
+require_once("../model/SUCURSAL.php");
 
-    $compania = new Compania();
+    $sucursal = new Sucursal();
 
     switch($_GET["op"]){
         case "guardaryeditar":
             if (empty($_POST["code"])){
-                $compania->get_compania_create($_POST["suc"],$_POST["cmp"]);
+                $sucursal->get_sucursal_create($_POST["emp"],$_POST["suc"]);
             }else{
-                $compania->get_compania_update($_POST["cod"],$_POST["suc"],$_POST["cmp"]);
+                $sucursal->get_sucursal_update($_POST["cod"],$_POST["suc"]);
             }
             break;
 
         case "listar":
-                $datos  = $compania->get_compania();
+                $datos   = $sucursal->get_sucursal_x_suc($_POST["emp"]);
                 $data   = Array();
                 foreach($datos as  $row){
                     $sub_array = array();
-                    $sub_array = $row["cmp"];
+                    $sub_array = $row["suc"];
                     $sub_array = "Editar";
                     $sub_array = "Eliminar";
                     $data[]    = $sub_array;
@@ -33,11 +33,11 @@ require_once("../model/COMPANIA.php");
             break;
 
         case "mostrar":
-                $datos = $compania->get_compania_read($_POST["cod"]);
+                $datos = $sucursal->get_sucursal_read($_POST["cod"]);
             break;
         
         case "eliminar":
-                $compania->get_compania_delete($_POST["cod"]);
+                $sucursal->get_sucursal_delete($_POST["cod"]);
             break;
     }
 ?>
